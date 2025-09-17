@@ -8,16 +8,17 @@ from pulsechat.permissions import IsRoomOwner
 from chats.serializers import RoomSerializer
 from chats.models import Room
 
+
 class RoomViewSet(viewsets.ModelViewSet):
     serializer_class = RoomSerializer
     queryset = Room.objects.all()
     permission_classes = [IsAuthenticated, IsRoomOwner]
-    
+
     def get_permissions(self):
         if self.request.method in ["PUT", "PATCH", "DELETE"]:
             return [IsAuthenticated(), IsRoomOwner]
         return [IsAuthenticated()]
-    
+
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
         data["owner"] = request.user.id
@@ -25,7 +26,3 @@ class RoomViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=201)
-        
-        
-
-

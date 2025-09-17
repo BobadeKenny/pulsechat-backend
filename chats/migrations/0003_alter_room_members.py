@@ -7,14 +7,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chats', '0002_rename_participants_room_members_alter_room_id_and_more'),
+        ("chats", "0002_rename_participants_room_members_alter_room_id_and_more"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='room',
-            name='members',
-            field=models.ManyToManyField(blank=True, related_name='rooms', to=settings.AUTH_USER_MODEL),
+            model_name="room",
+            name="members",
+            field=models.ManyToManyField(
+                blank=True, related_name="rooms", to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]

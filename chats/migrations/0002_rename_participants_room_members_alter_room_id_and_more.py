@@ -7,23 +7,29 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('chats', '0001_initial'),
+        ("chats", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='room',
-            old_name='participants',
-            new_name='members',
+            model_name="room",
+            old_name="participants",
+            new_name="members",
         ),
         migrations.AlterField(
-            model_name='room',
-            name='id',
-            field=models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False, unique=True),
+            model_name="room",
+            name="id",
+            field=models.UUIDField(
+                default=uuid.uuid4,
+                editable=False,
+                primary_key=True,
+                serialize=False,
+                unique=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='room',
-            name='name',
+            model_name="room",
+            name="name",
             field=models.CharField(max_length=255),
         ),
     ]

@@ -40,11 +40,12 @@ class RegisterUserSerializer(ModelSerializer):
         else:
             raise ValidationError("User with this username or email already exists.")
         return user
-    
+
+
 class LoginUserSerializer(serializers.Serializer):
     username_or_email = serializers.CharField()
     password = serializers.CharField(write_only=True)
-    
+
     class Meta:
         fields = ("username_or_email", "password")
 
@@ -66,23 +67,23 @@ class LoginUserSerializer(serializers.Serializer):
             )
         except (User.DoesNotExist, User.MultipleObjectsReturned):
             user = None
-        
 
         if user is None or not user.check_password(password):
             raise ValidationError("Invalid username/email or password.")
 
         return user
-    
-    
+
+
 class LogoutUserSerializer(serializers.Serializer):
     token = serializers.CharField()
-    
+
     def save(self):
         try:
             RefreshToken(self.validated_data["token"]).blacklist()
         except Exception:
             raise ValidationError("Invalid token or token already blacklisted.")
-        
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
