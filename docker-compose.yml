@@ -1,0 +1,34 @@
+services:
+  db:
+    restart: always
+    image: postgres:17
+    environment:
+      - POSTGRES_USER=pulsechat
+      - POSTGRES_PASSWORD=pulsechat
+      - POSTGRES_DB=pulsechat
+    ports:
+      - ":5432"
+    volumes:
+      - /var/lib/postgresql/data
+
+  web:
+    build: .
+    restart: always
+    command: "python3 manage.py runserver 0.0.0.0:8000"
+    environment:
+      - C_FORCE_ROOT=True
+      - DATABASE_URL=postgres://pulsechat:pulsechat@db/pulsechat
+    depends_on:
+      - db
+    volumes:
+      - ./:/code
+    ports:
+      - "8000:8000"
+
+  redis: 
+    restart: always
+    image: redis:8.2.1
+    ports:
+      - "6379:6379"
+    volumes:
+      - /var/lib/redis/data
