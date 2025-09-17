@@ -15,6 +15,7 @@ from channels.auth import AuthMiddlewareStack
 from django.core.asgi import get_asgi_application
 
 from chats.routing import websocket_urlpatterns
+from pulsechat.middleware import TokenAuthenticationMiddleware
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pulsechat.settings")
 
@@ -22,7 +23,7 @@ application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),
         "websocket": AllowedHostsOriginValidator(
-            AuthMiddlewareStack(URLRouter(websocket_urlpatterns))
+            TokenAuthenticationMiddleware(URLRouter(websocket_urlpatterns))
         ),
     }
 )
