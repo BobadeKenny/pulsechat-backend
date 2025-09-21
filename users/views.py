@@ -11,6 +11,7 @@ from users.serializers import (
     LogoutUserSerializer,
     UserSerializer,
 )
+from users.utils import get_user_tokens
 
 
 class RegisterUserView(generics.CreateAPIView):
@@ -21,8 +22,9 @@ class RegisterUserView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        user_tokens = get_user_tokens(user)
         return Response(
-            user.tokens,
+            user_tokens,
             status=status.HTTP_201_CREATED,
         )
 
@@ -34,7 +36,8 @@ class LoginUserView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        return Response(user.tokens, status=status.HTTP_200_OK)
+        tokens = get_user_tokens(user)
+        return Response(tokens, status=status.HTTP_200_OK)
 
 
 class LogoutUserView(generics.GenericAPIView):
