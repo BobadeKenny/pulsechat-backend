@@ -18,6 +18,11 @@ class RoomViewSet(viewsets.ModelViewSet):
         if self.request.method in ["PUT", "PATCH", "DELETE"]:
             return [IsAuthenticated(), IsRoomOwner]
         return [IsAuthenticated()]
+    
+    def get_queryset(self):
+        return self.queryset.filter(members=self.request.user)
+        
+    
 
     def create(self, request, *args, **kwargs):
         data = request.data.copy()
