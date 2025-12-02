@@ -4,9 +4,9 @@ from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from pulsechat.permissions import IsRoomOwner
-from chats.serializers import RoomSerializer
-from chats.models import Room
+from pulsechat.permissions import IsRoomOwner, IsRoomMember
+from chats.serializers import RoomSerializer, MessageSerializer
+from chats.models import Room, Message
 
 
 class RoomViewSet(viewsets.ModelViewSet):
@@ -31,3 +31,11 @@ class RoomViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=201)
+    
+class MessageViewset(viewsets.ReadOnlyModelViewSet):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated, IsRoomMember]
+
+    def get_queryset(self):
+        room_id = self.kwargs.get("room_id")
+        return Message.objects.filter(room_id=room_id).order_by("timestamp")

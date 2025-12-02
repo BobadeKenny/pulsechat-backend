@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from chats.models import Room
+from chats.models import Room, Message
 
 
 class RoomSerializer(ModelSerializer):
@@ -14,3 +14,8 @@ class RoomSerializer(ModelSerializer):
         room.members.set(members)
         room.join(room.owner)
         return room
+
+class MessageSerializer(ModelSerializer):
+    class Meta:
+        model = Message
+        fields = "__all__"
